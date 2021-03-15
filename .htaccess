@@ -1,0 +1,11 @@
+Options +FollowSymLinks +ExecCGI -Indexes
+
+ErrorDocument 404 http://localhost/teste/erros/404.php
+
+<ifModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^api/persons?$        http://localhost/teste/sistema/persons.php
+    RewriteRule ^api/persons?$        http://localhost/teste/sistema/persons.php
+    RewriteRule ^api/persons/(.*)?$        http://localhost/teste/sistema/persons.php?name=$1
+</ifModule>
