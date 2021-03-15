@@ -2,27 +2,34 @@
     require_once("../conexao.php");
 
     $name = isset($_GET["name"]) ? $_GET["name"] : null;
+    $post = isset($_POST) ? $_POST["teste"] : null;
 
-    $sql = $name == null ? "SELECT * FROM persons" : "SELECT * FROM persons WHERE FirstName = '$name'";
+    if ($post) {
+        exit(json_encode($_POST));
+    } else {
+        $sql = $name == null ? "SELECT * FROM persons" : "SELECT * FROM persons WHERE FirstName = '$name'";
 
-    $result = $conexao->query($sql);
+        $result = $conexao->query($sql);
 
-    $persons = array();
+        $persons = array();
 
-    if ($result) {
-        $retorno["quantity"] = $result->num_rows;
+        if ($result) {
 
-        while($listPersons = $result->fetch_assoc()) {
-            array_push($persons, $listPersons);
+            if ($result->num_rows > 1) {
+                $retorno["quantity"] = $result->num_rows;
+            }
+
+            while($listPersons = $result->fetch_assoc()) {
+                array_push($persons, $listPersons);
+            }
+
+            $retorno["persons"] = $persons;
+        } else {
+            $retorno["persons"] = [];
         }
 
-        $retorno["persons"] = $persons;
-    } else {
-        $retorno["quantity"] = 0;
-        $retorno["persons"] = [];
+        $json = json_encode($retorno);
+
+        exit($json);
     }
-
-    $json = json_encode($retorno);
-
-    exit($json);
     
